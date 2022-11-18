@@ -1,0 +1,12 @@
+node("slave1"){
+ stage("init"){
+   checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/somashekharshegaji/mavenproj.git']]])
+ }
+ stage("build"){
+   sh 'mvn package'
+ }
+  stage("deploy"){
+  
+ deploy adapters: [tomcat9(credentialsId: 'SLAVE_CREDS1', path: '', url: 'http://3.83.48.168:8080/')], contextPath: 'testenv', war: '**/*.war'
+ }
+} 
